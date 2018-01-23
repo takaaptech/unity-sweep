@@ -1,0 +1,3 @@
+[submodule "Assets/Plugins/Mempic"]
+	path = Assets/Plugins/Mempic
+	url = git@github.com:mempic/mempic-framework-unity.git

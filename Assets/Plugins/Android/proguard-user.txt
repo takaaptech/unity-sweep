@@ -1,0 +1,9 @@
+-dontwarn
+-ignorewarnings
+-dontobfuscate
+-keep public class com.mempic.** { *; }
+-keep public class com.heyzap.** { *; }
+-keep public class com.tenjin.** { *; }
+-keep public class com.ketchapp.promotion.Unity3d.** { *; }
+-keep public class com.google.android.gms.** { public *; }
+-keep public class com.google.games.bridge.** { *; }

@@ -1,0 +1,651 @@
+{
+	"auto_complete":
+	{
+		"selected_items":
+		[
+			[
+				"OnVisi",
+				"OnVisionEnable"
+			],
+			[
+				"transit",
+				"transitZone"
+			],
+			[
+				"fixedtime",
+				"fixedDeltaTime\tTime.*"
+			],
+			[
+				"GetInce",
+				"GetIncentivizedDisplay"
+			],
+			[
+				"seq",
+				"sequences"
+			],
+			[
+				"sequence",
+				"sequences"
+			],
+			[
+				"Sequence",
+				"NameSequence"
+			],
+			[
+				"SQ",
+				"SQUARE_LARGE"
+			],
+			[
+				"HideIn",
+				"HideInInspector\tPropFlags.*"
+			],
+			[
+				"sta",
+				"statistics"
+			],
+			[
+				"To",
+				"ToString"
+			],
+			[
+				"Create",
+				"CreateElement"
+			],
+			[
+				"r",
+				"reference"
+			],
+			[
+				"Audio",
+				"AudioSource"
+			],
+			[
+				"Vec",
+				"Vector3"
+			],
+			[
+				"Chan",
+				"ChangeState"
+			]
+		]
+	},
+	"buffers":
+	[
+		{
+			"file": "Assets/Plugins/Mempic/Scripts/Entities/Tweener/Tweener.Move.cs",
+			"settings":
+			{
+				"buffer_size": 1583,
+				"encoding": "UTF-8",
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "Assets/Plugins/Mempic/Scripts/Entities/Tweener/Tweener.Rotate.cs",
+			"settings":
+			{
+				"buffer_size": 885,
+				"encoding": "UTF-8",
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "Assets/Plugins/Mempic/Scripts/Entities/Tweener/Tweener.Scale.cs",
+			"settings":
+			{
+				"buffer_size": 884,
+				"encoding": "UTF-8",
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "Assets/Plugins/Mempic/Scripts/Entities/Tweener/Tweener.Color.cs",
+			"settings":
+			{
+				"buffer_size": 884,
+				"encoding": "UTF-8",
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"contents": "/**\n *\n * @name mempic.org\n * @copyright (c) by SWISS INTERGROUP LP\n * @copyright (c) by WWW.MEMPIC.ORG\n * @copyright (c) by IGOR MATS\n *\n *\n * @license http://www.mempic.org/licenses/private\n *\n * By exercising the licensed rights you accept and agree to be bound by the\n * terms and conditions of this @license. To the extent this @license\n * may be interpreted as a contract, you are granted the licensed rights\n * in consideration of your acceptance of these terms and conditions,\n * and the licensor grants you such rights in consideration of benefits\n * the licensor receives from making the licensed material available\n * under these terms and conditions.\n *\n */\nusing Mempic;\n\nusing System;\nusing System.Collections;\nusing System.Collections.Generic;\n\nusing UnityEngine;\nusing UnityEngine.UI;\n\nusing DG.Tweening;\n\n/**\n *\n *\n *\n */\nnamespace Mempic {\n\n  /**\n   *\n   *\n   *\n   */\n  public class Tweener : MonoBehaviour {\n\n    /**\n     *\n     *\n     *\n     */\n    protected List<Sequence> sequences = new List<Sequence>();\n\n    /**\n     *\n     *\n     *\n     */\n    protected Tween tween = null;\n    protected Sequence sequence = null;\n\n    /**\n     *\n     *\n     *\n     */\n    protected virtual void CreateSequence()\n    {\n      this.sequences.Add(\n        this.sequence = DOTween.Sequence()\n      );\n    }\n\n    protected virtual void DestroySequence(Sequence sequence)\n    {\n      sequence.Kill();\n\n      /**\n       *\n       *\n       *\n       */\n      this.sequences.Remove(sequence);\n    }\n\n    /**\n     *\n     *\n     *\n     */\n    public virtual Tween Spawn(params Tween[] tweeners)\n    {\n      return null;\n    }\n\n    /**\n     *\n     *\n     *\n     */\n    public virtual Tween Sequence(params Tween[] sequences)\n    {\n      return this.sequence = null;\n    }\n\n    /**\n     *\n     *\n     *\n     */\n    public virtual Sequence GetSequence()\n    {\n      if(this.sequence == null)\n      {\n        this.CreateSequence();\n      }\n\n      /**\n       *\n       *\n       *\n       */\n      return this.sequence;\n    }\n\n    /**\n     *\n     *\n     *\n     */\n    public virtual Tween Delay(double time)\n    {\n      return this.GetSequence().AppendInterval((float) time);\n    }\n\n    public virtual Tween Delay(double min, double max)\n    {\n      return this.Delay(\n        Math.Random(\n          min,\n          max\n        )\n      );\n    }\n\n    public virtual Tween Rotate(double time, double x, double y, double z)\n    {\n      this.GetSequence().Append(\n        this.tween = this.GetComponent<Transform>().DORotate(\n          new Vector3(\n            (float) x,\n            (float) y,\n            (float) z\n          ),\n          (float) time,\n          RotateMode.Fast\n        )\n      );\n\n      return this.tween;\n    }\n\n    public virtual Tween Rotate(double time, double rotation)\n    {\n      return this.Rotate(\n        time,\n        this.transform.localEulerAngles.x,\n        this.transform.localEulerAngles.y,\n        rotation\n      );\n    }\n\n    public virtual Tween Scale(double time, double x, double y, double z)\n    {\n      this.GetSequence().Append(\n        this.tween = this.GetComponent<Transform>().DOScale(\n          new Vector3(\n            (float) x,\n            (float) y,\n            (float) z\n          ),\n          (float) time\n        )\n      );\n\n      return this.tween;\n    }\n\n    public virtual Tween Scale(double time, double scale)\n    {\n      return this.Scale(\n        time,\n        scale,\n        scale,\n        scale\n      );\n    }\n\n    //\n    public virtual Tween Fade(double time, double fade)\n    {\n      if(null != this.GetComponent<CanvasGroup>())    return this.Fade(this.GetComponent<CanvasGroup>(), time, fade);\n      if(null != this.GetComponent<SpriteRenderer>()) return this.Fade(this.GetComponent<SpriteRenderer>(), time, fade);\n      if(null != this.GetComponent<Image>())          return this.Fade(this.GetComponent<Image>(), time, fade);\n      if(null != this.GetComponent<Text>())           return this.Fade(this.GetComponent<Text>(), time, fade);\n      if(null != this.GetComponent<Renderer>())       return this.Fade(this.GetComponent<Renderer>(), time, fade);\n\n      return null;\n    }\n\n    public virtual Tween Fade(SpriteRenderer component, double time, double fade)\n    {\n      this.GetSequence().Append(\n        this.tween = component.DOFade(\n          (float) fade,\n          (float) time\n        )\n      );\n\n      return this.tween;\n    }\n\n    public virtual Tween Fade(Image component, double time, double fade)\n    {\n      this.GetSequence().Append(\n        this.tween = component.DOFade(\n          (float) fade,\n          (float) time\n        )\n      );\n\n      return this.tween;\n    }\n\n    /*public virtual Tween Fade(TextMesh component, double time, double fade)\n    {\n      this.GetSequence().Append(\n        this.tween = component.DOFade(\n          (float) fade,\n          (float) time\n        )\n      );\n\n      return this.tween;\n    }*/\n\n    public virtual Tween Fade(Text component, double time, double fade)\n    {\n      this.GetSequence().Append(\n        this.tween = component.DOFade(\n          (float) fade,\n          (float) time\n        )\n      );\n\n      return this.tween;\n    }\n\n    public virtual Tween Fade(CanvasGroup component, double time, double fade)\n    {\n      this.GetSequence().Append(\n        this.tween = component.DOFade(\n          (float) fade,\n          (float) time\n        )\n      );\n\n      return this.tween;\n    }\n\n    public virtual Tween Fade(Renderer component, double time, double fade)\n    {\n      this.GetSequence().Append(\n        this.tween = component.material.DOFade(\n          (float) fade,\n          (float) time\n        )\n      );\n\n      return this.tween;\n    }\n\n    public virtual Tween Color(double time, double r, double g, double b, double a = 1.0)\n    {\n      return this.Color(\n        time,\n        new Color(\n          (float) r,\n          (float) g,\n          (float) b,\n          (float) a\n        )\n      );\n    }\n\n    public virtual Tween Color(double time, Color color)\n    {\n      if(null != this.GetComponent<SpriteRenderer>()) return this.Color(this.GetComponent<SpriteRenderer>(), time, color);\n      if(null != this.GetComponent<MeshRenderer>())   return this.Color(this.GetComponent<MeshRenderer>(), time, color);\n      if(null != this.GetComponent<Material>())       return this.Color(this.GetComponent<Material>(), time, color);\n      if(null != this.GetComponent<Image>())          return this.Color(this.GetComponent<Image>(), time, color);\n      if(null != this.GetComponent<Text>())           return this.Color(this.GetComponent<Text>(), time, color);\n\n      return null;\n    }\n\n    public virtual Tween Color(SpriteRenderer component, double time, Color color)\n    {\n      this.GetSequence().Append(\n        this.tween = component.DOColor(\n          color,\n          (float) time\n        )\n      );\n\n      return this.tween;\n    }\n\n    public virtual Tween Color(Material component, double time, Color color)\n    {\n      this.GetSequence().Append(\n        this.tween = component.DOColor(\n          color,\n          (float) time\n        )\n      );\n\n      return this.tween;\n    }\n\n    public virtual Tween Color(Image component, double time, Color color)\n    {\n      this.GetSequence().Append(\n        this.tween = component.DOColor(\n          color,\n          (float) time\n        )\n      );\n\n      return this.tween;\n    }\n\n    public virtual Tween Color(Text component, double time, Color color)\n    {\n      this.GetSequence().Append(\n        this.tween = component.DOColor(\n          color,\n          (float) time\n        )\n      );\n\n      return this.tween;\n    }\n\n    public virtual Tween Color(MeshRenderer component, double time, Color color)\n    {\n      this.GetSequence().Append(\n        this.tween = component.material.DOColor(\n          color,\n          (float) time\n        )\n      );\n\n      return this.tween;\n    }\n\n    public virtual Tween Shake(double time, double strength, double vibrate, double randomness, bool fade)\n    {\n      this.GetSequence().Append(\n        this.tween = this.GetComponent<Transform>().DOShakePosition(\n          (float) time,\n          (float) strength,\n          (int) vibrate,\n          (float) randomness,\n          false,\n          fade\n        )\n      );\n\n      return this.tween;\n    }\n\n    /**\n     *\n     *\n     *\n     */\n    public virtual Tween MoveBy(double time, double x, double y, double z)\n    {\n      this.GetSequence().Append(\n        this.tween = this.GetComponent<Transform>().DOBlendableLocalMoveBy(\n          new Vector3(\n            (float) x,\n            (float) y,\n            (float) z\n          ),\n          (float) time\n        )\n      );\n\n      return this.tween;\n    }\n\n    public virtual Tween MoveBy(double time, double x, double y)\n    {\n      this.GetSequence().Append(\n        this.tween = this.GetComponent<Transform>().DOBlendableLocalMoveBy(\n          new Vector3(\n            (float) x,\n            (float) y,\n            (float) 0\n          ),\n          (float) time\n        )\n      );\n\n      return this.tween;\n    }\n\n    public virtual Tween RotateBy(double time, double x, double y, double z)\n    {\n      this.GetSequence().Append(\n        this.tween = this.GetComponent<Transform>().DOBlendableLocalRotateBy(\n          new Vector3(\n            (float) x,\n            (float) y,\n            (float) z\n          ),\n          (float) time,\n          RotateMode.FastBeyond360\n        )\n      );\n\n      return this.tween;\n    }\n\n    public virtual Tween RotateBy(double time, double rotation)\n    {\n      return this.RotateBy(\n        time,\n        0,\n        0,\n        rotation\n      );\n    }\n\n    public virtual Tween ScaleBy(double time, double x, double y, double z)\n    {\n      this.GetSequence().Append(\n        this.tween = this.GetComponent<Transform>().DOBlendableScaleBy(\n          new Vector3(\n            (float) x,\n            (float) y,\n            (float) z\n          ),\n          (float) time\n        )\n      );\n\n      return this.tween;\n    }\n\n    public virtual Tween ScaleBy(double time, double scale)\n    {\n      return this.ScaleBy(\n        time,\n        scale,\n        scale,\n        scale\n      );\n    }\n\n    /**\n     *\n     *\n     *\n     */\n    public virtual Tween Progress(double time, double value)\n    {\n      this.GetSequence().Append(\n        this.tween = this.GetComponent<UnityEngine.UI.Image>().DOFillAmount(\n          (float) value,\n          (float) time\n        )\n      );\n\n      return this.tween;\n    }\n\n    /**\n     *\n     *\n     *\n     */\n    public virtual Tween Starts(double time, TweenCallback callback)\n    {\n      this.GetSequence().Append(\n        this.Rotate(0.00002, 0).OnComplete(\n          callback\n        )\n      );\n\n      return this.Delay(time);\n    }\n\n    public virtual Tween Finish(TweenCallback callback)\n    {\n      this.GetSequence().AppendCallback(callback); return null;\n    }\n\n    public virtual Tween Complete(TweenCallback callback)\n    {\n      this.GetSequence().OnStepComplete(callback); return null;\n    }\n\n    /**\n     *\n     *\n     *\n     */\n    public virtual Tween Loops()\n    {\n      this.GetSequence().SetLoops(-1, LoopType.Restart); return null;\n    }\n\n    public virtual Tween Loops(int count = -1, LoopType type = LoopType.Restart)\n    {\n      this.GetSequence().SetLoops(count, type); return null;\n    }\n\n    public virtual Tween Loops(LoopType type = LoopType.Restart)\n    {\n      this.GetSequence().SetLoops(-1, type); return null;\n    }\n\n    public virtual Tween Name(String name)\n    {\n      this.GetSequence().SetId(name); return null;\n    }\n\n    /**\n     *\n     *\n     *\n     */\n    public virtual List<Sequence> GetTweens()\n    {\n      return this.sequences;\n    }\n\n    /**\n     *\n     *\n     *\n     */\n    public virtual void StopTweens()\n    {\n      for(var i = this.sequences.Count - 1; i >= 0; i--)\n      {\n        this.DestroySequence(this.sequences[i]);\n      }\n\n      /**\n       *\n       *\n       *\n       */\n      DOTween.Kill(this);\n    }\n\n    public virtual void StopTween(String name)\n    {\n      for(var i = this.sequences.Count - 1; i >= 0; i--)\n      {\n        if(name.Equals(this.sequences[i].id))\n        {\n          this.DestroySequence(this.sequences[i]);\n        }\n      }\n\n      /**\n       *\n       *\n       *\n       */\n      DOTween.Kill(name);\n    }\n\n    /**\n     *\n     *\n     *\n     */\n    public virtual Tween GetTween(String name)\n    {\n      for(var i = this.sequences.Count - 1; i >= 0; i--)\n      {\n        if(name.Equals(sequences[i].id))\n        {\n          if(sequences[i].IsPlaying())\n          {\n            return sequences[i];\n          }\n        }\n      }\n\n      /**\n       *\n       *\n       *\n       */\n      return null;\n    }\n  }\n}\n",
+			"file": "Assets/Plugins/Mempic/Scripts/Entities/Tweener/Tweener.cs",
+			"file_size": 13413,
+			"file_write_time": 131578180793021058,
+			"settings":
+			{
+				"buffer_size": 12667,
+				"line_ending": "Unix"
+			}
+		}
+	],
+	"build_system": "",
+	"build_system_choices":
+	[
+		[
+			[
+				[
+					"Packages/Unity3D Build System/Unity.sublime-build",
+					""
+				],
+				[
+					"Packages/Unity3D Build System/Unity.sublime-build",
+					"Clean"
+				]
+			],
+			[
+				"Packages/Unity3D Build System/Unity.sublime-build",
+				""
+			]
+		]
+	],
+	"build_varint": "",
+	"command_palette":
+	{
+		"height": 367.0,
+		"last_filter": "Package Control: ",
+		"selected_items":
+		[
+			[
+				"Package Control: ",
+				"Package Control: Install Package"
+			],
+			[
+				"install",
+				"Package Control: Install Package"
+			]
+		],
+		"width": 449.0
+	},
+	"console":
+	{
+		"height": 245.0,
+		"history":
+		[
+		]
+	},
+	"distraction_free":
+	{
+		"menu_visible": true,
+		"show_minimap": false,
+		"show_open_files": false,
+		"show_tabs": false,
+		"side_bar_visible": false,
+		"status_bar_visible": false
+	},
+	"expanded_folders":
+	[
+		"/Users/igor/Development/unity-sweep/Assets/Scripts",
+		"/Users/igor/Development/unity-sweep/Assets/Plugins/Mempic/Scripts",
+		"/Users/igor/Development/unity-sweep/Assets/Plugins/Mempic/Scripts/Entities",
+		"/Users/igor/Development/unity-sweep/Assets/Plugins/Mempic/Scripts/Entities/Node",
+		"/Users/igor/Development/unity-sweep/Assets/Plugins/Mempic/Scripts/Entities/Tweener"
+	],
+	"file_history":
+	[
+		"/Users/igor/Development/unity-sweep/Assets/Plugins/Android/proguard-user.txt",
+		"/Users/igor/Development/unity-sweep/Assets/Plugins/Android/mainTemplate.gradle",
+		"/Users/igor/Development/unity-sweep/Assets/Plugins/Android/AndroidManifest.xml",
+		"/Users/igor/Development/unity-sweep/Assets/Plugins/Android/res/values/strings.xml",
+		"/Users/igor/Development/unity-bricks/Assets/Plugins/Android/mainTemplate.gradle",
+		"/Users/igor/Development/unity-falling-ballz/Assets/Plugins/Android/mainTemplate.gradle",
+		"/Users/igor/Development/unity-sweep/Assets/Plugins/Android/res/values/version.xml",
+		"/Users/igor/Development/unity-sweep/Assets/Plugins/Mempic/Scripts/Entities/Node/Node.cs",
+		"/Users/igor/Development/unity-sweep/Assets/Plugins/Mempic/Scripts/Entities/Node/Node.Physics.cs",
+		"/Users/igor/Development/unity-sweep/Assets/Plugins/Mempic/Scripts/Platform/Tenjin.cs",
+		"/Users/igor/Development/unity-sweep/Assets/Scripts/Popups/More.cs",
+		"/Users/igor/Development/unity-sweep/Assets/Scripts/Counter.cs",
+		"/Users/igor/Development/unity-sweep/Assets/Plugins/Mempic/Scripts/Audio/Music.cs",
+		"/Users/igor/Development/unity-sweep/Assets/Scripts/Screens/Revive.cs",
+		"/Users/igor/Development/unity-sweep/Assets/Plugins/Mempic/Scripts/Audio/Sound.cs",
+		"/Users/igor/Development/unity-sweep/Assets/Scripts/Environment.cs",
+		"/Users/igor/Development/unity-sweep/Assets/Plugins/Mempic/Scripts/Audio/Source.cs",
+		"/Users/igor/Development/unity-sweep/Assets/Plugins/Mempic/Scripts/Audio/AudioSource.cs",
+		"/Users/igor/Development/unity-sweep/Assets/Plugins/Mempic/Scripts/Audio/MusicSource.cs",
+		"/Users/igor/Development/unity-sweep/Assets/Plugins/Mempic/Scripts/Audio/SoundSource.cs",
+		"/Users/igor/Development/unity-sweep/Assets/Plugins/Mempic/Scripts/Audio/MusicSource",
+		"/Users/igor/Development/unity-sweep/Assets/Scripts/Entities/Element.cs",
+		"/Users/igor/Development/unity-sweep/Assets/Scripts/Entities/Figure.cs",
+		"/Users/igor/Development/unity-sweep/Assets/Scripts/Entities/Character.cs",
+		"/Users/igor/Development/unity-sweep/Assets/Scripts/Entities/Ball.cs",
+		"/Users/igor/Development/unity-sweep/Assets/Plugins/Mempic/Scripts/Platform/iOS/Media.mm",
+		"/Users/igor/Development/unity-sweep/Assets/Plugins/Mempic/Scripts/Platform/iOS/Share.mm",
+		"/Users/igor/Development/unity-sweep/Assets/Scripts/Screens/Finish.cs",
+		"/Users/igor/Development/unity-sweep/Assets/Plugins/Mempic/Scripts/Platform/iOS/Vibration.mm",
+		"/Users/igor/Development/unity-bricks/Assets/Scripts/Screens/Menu.cs",
+		"/Users/igor/Development/unity-sweep/Assets/Plugins/Mempic/Scripts/Entities/Button.cs",
+		"/Users/igor/Development/unity-sweep/Assets/Plugins/Mempic/Scripts/Entities/Node/Node.Trail.cs",
+		"/Users/igor/Development/unity-sweep/Assets/Plugins/Mempic/Scripts/Entities/Node/Node.Size.cs",
+		"/Users/igor/Development/unity-sweep/Assets/Plugins/Mempic/Scripts/Entities/Node/Node.Progress.cs",
+		"/Users/igor/Development/unity-sweep/Assets/Plugins/Mempic/Scripts/Entities/Node/Node.Misc.cs",
+		"/Users/igor/Development/unity-sweep/Assets/Plugins/Mempic/Scripts/Entities/Node/Node.Color.cs",
+		"/Users/igor/Development/unity-sweep/Assets/Plugins/Mempic/Scripts/Entities/Node/Node.Rotation.cs",
+		"/Users/igor/Development/unity-sweep/Assets/Plugins/Mempic/Scripts/Entities/Node/Node.Scale.cs",
+		"/Users/igor/Development/unity-sweep/Assets/Plugins/Mempic/Scripts/Entities/Node.cs",
+		"/Users/igor/Development/unity-sweep/Assets/Plugins/Mempic/Scripts/Entities/Node.Color.cs",
+		"/Users/igor/Development/unity-sweep/Assets/Plugins/Mempic/Scripts/Entities/Node.Physics.cs",
+		"/Users/igor/Development/unity-sweep/Assets/Plugins/Mempic/Scripts/Entities/Tweener.Move.cs",
+		"/Users/igor/Development/unity-sweep/Assets/Plugins/Mempic/Scripts/Entities/Tweener.Rotate.cs",
+		"/Users/igor/Development/unity-sweep/Assets/Plugins/Mempic/Scripts/Entities/Tweener.Scale.cs",
+		"/Users/igor/Development/unity-sweep/Assets/Plugins/Mempic/Scripts/Entities/Tweener.Color.cs",
+		"/Users/igor/Development/unity-sweep/Assets/Plugins/Mempic/Scripts/Entities/Node.Scale.cs",
+		"/Users/igor/Development/unity-sweep/Assets/Plugins/Mempic/Scripts/Entities/Node.Misc.cs",
+		"/Users/igor/Development/unity-sweep/Assets/Plugins/Mempic/Scripts/Node.cs",
+		"/Users/igor/Development/unity-sweep/Assets/Scripts/Entities/Decoration.cs",
+		"/Users/igor/Development/unity-sweep/Assets/Plugins/Mempic/Scripts/Node.Physics.cs",
+		"/Users/igor/Development/unity-sweep/Assets/Plugins/Mempic/Scripts/Node.Position.cs",
+		"/Users/igor/Development/unity-sweep/Assets/Plugins/Mempic/Scripts/Node.Rotation.cs",
+		"/Users/igor/Development/unity-sweep/Assets/Scripts/Generator.cs",
+		"/Users/igor/Development/unity-sweep/Assets/Scripts/Race.cs",
+		"/Users/igor/Development/unity-sweep/Assets/Plugins/Mempic/Scripts/Entities/Text.cs",
+		"/Users/igor/Development/unity-sweep/Assets/Scripts/Control.cs",
+		"/Users/igor/Development/unity-sweep/Assets/Plugins/Mempic/Scripts/Misc/Debug/ComponentFrames.cs",
+		"/Users/igor/Development/unity-sweep/Assets/Plugins/Mempic/Scripts/Node.Physics",
+		"/Users/igor/Development/unity-sweep/Assets/Scripts/Screens/Game.cs",
+		"/Users/igor/Development/unity-sweep/Assets/Scripts/Entities/BallInfo.cs",
+		"/Users/igor/Development/unity-sweep/Assets/Scripts/Curvature.cs",
+		"/Users/igor/Development/unity-sweep/Assets/Scripts/Generator/Scenario2.cs",
+		"/Users/igor/Development/unity-sweep/Assets/Scripts/Generator/Scenario3.cs",
+		"/Users/igor/Development/unity-sweep/Assets/Scripts/Generator/Scenario5.cs",
+		"/Users/igor/Development/unity-sweep/Assets/Scripts/Entities/Plane.cs",
+		"/Users/igor/Development/unity-sweep/Assets/Scripts/Controller.cs",
+		"/Users/igor/Development/unity-sweep/Assets/Scripts/Generator/Scenario.cs",
+		"/Users/igor/Development/unity-sweep/Assets/Scripts/Generator/Plane.cs",
+		"/Users/igor/Development/unity-sweep/Assets/Plugins/Mempic/Scripts/Pools/Pool.cs",
+		"/Users/igor/Development/unity-sweep/Assets/Scripts/Entities/Boost.cs",
+		"/Users/igor/Development/unity-sweep/Assets/Scripts/Entities/Bot.cs",
+		"/Users/igor/Development/unity-sweep/Assets/Plugins/Mempic/Scripts/Platform/Media.cs",
+		"/Users/igor/Development/unity-sweep/Assets/Scripts/Screens/Menu.cs",
+		"/Users/igor/Development/unity-sweep/Assets/Scripts/UI/Share.cs",
+		"/Users/igor/Development/unity-sweep/Assets/Plugins/Mempic/Scripts/Settings/Settings.cs",
+		"/Users/igor/Development/unity-sweep/Assets/Plugins/Mempic/Scripts/Platform/Ad.cs",
+		"/Users/igor/Development/unity-sweep/Assets/Plugins/Mempic/Scripts/Platform/Share.cs",
+		"/Users/igor/Development/unity-sweep/Assets/Scripts/Generator/Bot.cs",
+		"/Users/igor/Development/unity-sweep/Assets/Scripts/UI/Button.cs",
+		"/Users/igor/Development/unity-sweep/Assets/Plugins/Mempic/Scripts/Tweener.cs",
+		"/Users/igor/Development/unity-sweep/Assets/Plugins/Mempic/Scripts/Posts/Grayscale.cs",
+		"/Users/igor/Development/unity-sweep/Assets/Scripts/Generator/Boost.cs",
+		"/Users/igor/Development/unity-sweep/Assets/Scripts/Generator/Scenarious.cs",
+		"/Users/igor/Development/unity-sweep/Assets/Scripts/Entities/Coin.cs",
+		"/Users/igor/Development/unity-sweep/Assets/Shaders/shader.curvature.sprite.shader",
+		"/Users/igor/Development/unity-sweep/Assets/Scripts/Generator/Dust.cs",
+		"/Users/igor/Development/unity-sweep/Assets/Scenes/Application.unity",
+		"/Users/igor/Development/unity-sweep/Assets/Scripts/Generator/ScenarioBoost.cs",
+		"/Users/igor/Development/unity-sweep/Assets/Scripts/Generator/Decoration.cs",
+		"/Users/igor/Development/unity-sweep/Assets/Plugins/Mempic/Scripts/Screens/Screen.cs",
+		"/Users/igor/Development/unity-sweep/Assets/Plugins/Mempic/Scripts/Audio/Audio.cs",
+		"/Users/igor/Development/unity-pinball/Assets/Scripts/Popups/More.cs",
+		"/Users/igor/Development/unity-sweep/Assets/Shaders/shader.curvature.vertex.shader",
+		"/Users/igor/Development/unity-sweep/Assets/Shaders/shader.curvature.texture.shader",
+		"/Users/igor/Development/unity-sweep/Assets/Scripts/Entities/Box.cs",
+		"/Users/igor/Development/unity-sweep/Assets/Shaders/shader.ball.shader",
+		"/Users/igor/Development/unity-sweep/Assets/Scripts/Generator/Scenario1.cs",
+		"/Users/igor/Development/unity-sweep/Assets/Scripts/Entities/Shape.cs",
+		"/Users/igor/Development/unity-sweep/Assets/Scripts/Entities/Trampoline.cs",
+		"/Users/igor/Development/unity-sweep/Assets/Shaders/shader.plane.shader",
+		"/Users/igor/Development/unity-sweep/Assets/Shaders/shader.element.shader",
+		"/Users/igor/Development/unity-sweep/Assets/Shaders/shader.decoration.shader",
+		"/Users/igor/Development/unity-sweep/Assets/Shaders/shader.trail.shader",
+		"/Users/igor/Development/unity-sweep/Assets/Plugins/Mempic/Shaders/shader.vertex.color.shader",
+		"/Users/igor/Development/unity-falling-ballz/Assets/Scripts/Entities/Shape.cs",
+		"/Users/igor/Development/unity-sweep/Assets/Scripts/Scheme.cs",
+		"/Users/igor/Development/unity-sweep/Assets/Scripts/Generator/Scenario4.cs",
+		"/Users/igor/Development/unity-sweep/Assets/Scripts/Entities/BallTrail.cs",
+		"/Users/igor/Development/unity-pinball/Assets/Scripts/Generator/Hole.cs",
+		"/Users/igor/Development/unity-sweep/Assets/Scripts/Entities/Dust.cs",
+		"/Users/igor/Development/unity-sweep/Assets/Shaders/shader.sprite.shader",
+		"/Users/igor/Development/unity-sweep/Assets/Scripts/Entities/Event.cs",
+		"/Users/igor/Downloads/builtin_shaders-2017/DefaultResourcesExtra/Alpha-Diffuse.shader",
+		"/Users/igor/Downloads/builtin_shaders-2017/DefaultResourcesExtra/Standard.shader",
+		"/Users/igor/Downloads/builtin_shaders-2017/DefaultResourcesExtra/Sprites-Default.shader",
+		"/Users/igor/Development/unity-sweep/Assets/Scenes/1.unity",
+		"/Users/igor/Development/unity-sweep/Assets/Scripts/Generator/Components.cs",
+		"/Users/igor/Development/unity-sweep/Assets/Shaders/shader.font.shader",
+		"/Users/igor/Downloads/builtin_shaders-2017/DefaultResourcesExtra/Particle Blend.shader",
+		"/Users/igor/Downloads/builtin_shaders-2017/DefaultResourcesExtra/Particle AddSmooth.shader",
+		"/Users/igor/Development/unity-sweep/Assets/Materials/material.ball.trail.mat",
+		"/Users/igor/Downloads/builtin_shaders-2017/DefaultResourcesExtra/Particle Add.shader",
+		"/Users/igor/Downloads/builtin_shaders-2017/DefaultResourcesExtra/Particle Premultiply Blend.shader",
+		"/Users/igor/Development/unity-pinball/Assets/Shaders/shader.font.shader",
+		"/Users/igor/Development/unity-sweep/Assets/Plugins/Mempic/Scripts/Misc/Math.cs",
+		"/Users/igor/Development/unity-bricks/Assets/Scripts/Generator.cs",
+		"/Users/igor/Development/unity-sweep/Assets/Scripts/Generator/Circle.cs",
+		"/Users/igor/Development/unity-sweep/Assets/Scripts/Generator/Circle@1.cs"
+	],
+	"find":
+	{
+		"height": 23.0
+	},
+	"find_in_files":
+	{
+		"height": 102.0,
+		"where_history":
+		[
+		]
+	},
+	"find_state":
+	{
+		"case_sensitive": false,
+		"find_history":
+		[
+			"UpdateButtons",
+			"Music",
+			"Audio",
+			"Sound",
+			"//if",
+			"CreateTrail",
+			"trail",
+			"Destroy(fal",
+			"Destroy(f",
+			"DestroyTrail",
+			"trail",
+			"ChangeSprite",
+			"GetPositionZ",
+			"this.GetComponent<Rigidbody2D>()",
+			"this.GetComponent<Rigidbody>()",
+			"SetVeloc",
+			"element.",
+			"element",
+			"GetWid",
+			"UpdateIn",
+			"setColor",
+			"CreateInf",
+			"CreateInfo",
+			"GetHeyzapID",
+			"share",
+			"CreateTrail",
+			"DestroyTrail",
+			"CreateTrail",
+			"UpdateLogic",
+			"track",
+			"OnDisable",
+			"GAME",
+			"Overlap",
+			"this.speed",
+			"ClearTrail",
+			"constra",
+			"GetSpeed",
+			"box",
+			"CreateInfo",
+			"Destroy",
+			"SetVelocity",
+			"camera",
+			"times",
+			"DestroyTrail",
+			");\n",
+			"color",
+			"CreateInfo",
+			"SetVelocity",
+			"component",
+			"cameraPositionMin",
+			"Blend",
+			"_Curvature_x",
+			"offset",
+			"sweep"
+		],
+		"highlight": true,
+		"in_selection": false,
+		"preserve_case": false,
+		"regex": false,
+		"replace_history":
+		[
+			"this.components.rigidBody2d",
+			"this.components.rigidBody",
+			"elements"
+		],
+		"reverse": false,
+		"show_context": true,
+		"use_buffer2": true,
+		"whole_word": false,
+		"wrap": true
+	},
+	"groups":
+	[
+		{
+			"selected": 0,
+			"sheets":
+			[
+				{
+					"buffer": 0,
+					"file": "Assets/Plugins/Mempic/Scripts/Entities/Tweener/Tweener.Move.cs",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 1583,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								881,
+								881
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/C#/C#.sublime-syntax",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 117.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 0,
+					"type": "text"
+				},
+				{
+					"buffer": 1,
+					"file": "Assets/Plugins/Mempic/Scripts/Entities/Tweener/Tweener.Rotate.cs",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 885,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								885
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/C#/C#.sublime-syntax",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 4,
+					"type": "text"
+				},
+				{
+					"buffer": 2,
+					"file": "Assets/Plugins/Mempic/Scripts/Entities/Tweener/Tweener.Scale.cs",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 884,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								884
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/C#/C#.sublime-syntax",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 3,
+					"type": "text"
+				},
+				{
+					"buffer": 3,
+					"file": "Assets/Plugins/Mempic/Scripts/Entities/Tweener/Tweener.Color.cs",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 884,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								854,
+								854
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/C#/C#.sublime-syntax",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 2,
+					"type": "text"
+				},
+				{
+					"buffer": 4,
+					"file": "Assets/Plugins/Mempic/Scripts/Entities/Tweener/Tweener.cs",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 12667,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								2331,
+								2331
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/C#/C#.sublime-syntax",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 1914.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 1,
+					"type": "text"
+				}
+			]
+		}
+	],
+	"incremental_find":
+	{
+		"height": 23.0
+	},
+	"input":
+	{
+		"height": 36.0
+	},
+	"layout":
+	{
+		"cells":
+		[
+			[
+				0,
+				0,
+				1,
+				1
+			]
+		],
+		"cols":
+		[
+			0.0,
+			1.0
+		],
+		"rows":
+		[
+			0.0,
+			1.0
+		]
+	},
+	"menu_visible": true,
+	"output.exec":
+	{
+		"height": 100.0
+	},
+	"output.find_results":
+	{
+		"height": 0.0
+	},
+	"output.variable_get":
+	{
+		"height": 0.0
+	},
+	"pinned_build_system": "Packages/Unity3D Build System/Unity.sublime-build",
+	"project": "unity-sweep.sublime-project",
+	"replace":
+	{
+		"height": 42.0
+	},
+	"save_all_on_build": true,
+	"select_file":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"select_project":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"select_symbol":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"selected_group": 0,
+	"settings":
+	{
+	},
+	"show_minimap": true,
+	"show_open_files": false,
+	"show_tabs": true,
+	"side_bar_visible": true,
+	"side_bar_width": 287.0,
+	"status_bar_visible": true,
+	"template_settings":
+	{
+	}
+}
